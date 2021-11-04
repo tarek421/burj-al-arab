@@ -1,0 +1,171 @@
+*{
+   margin: 0px;
+   padding: 0px;;
+}
+
+body{
+   font-family: Arial, Helvetica, sans-serif;
+}
+
+.container
+{
+   display: grid;
+   position: relative;
+   grid-template-columns: 1fr 2fr;
+   background-color: red;
+   background: linear-gradient(to bottom, rgb(6, 108, 224),  rgb(14, 48, 122));
+   width: 800px;
+   height: 400px;
+   margin: 10% auto;;
+   border-radius: 5px;
+}
+
+.content-holder
+{
+   text-align: center;
+   color: white;
+   font-size: 14px;
+   font-weight: lighter;
+   letter-spacing: 2px;
+   margin-top: 15%;
+   padding: 50px;
+}
+
+.content-holder h2
+{
+   font-size: 34px;
+   margin: 20px auto;
+}
+
+.content-holder p
+{
+   margin: 30px auto;
+}
+
+.content-holder button
+{
+   border:none;
+   font-size: 15px;
+   padding: 10px;
+   border-radius: 6px;
+   background-color: white;
+   width: 150px;
+   margin: 20px auto;
+   cursor: pointer;
+}
+
+
+.box-2{
+   background-color: white;
+   margin: 5px;
+}
+
+.social-login{
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   margin-top: 10px;
+}
+
+.social-icon {
+   list-style: none;
+   font-size: 20px;
+   margin: 5px;
+   background: linear-gradient(
+45deg, rgb(233 24 24), rgb(161 27 205), transparent);
+   border-radius: 50%;
+   padding: 8px 10px;
+   color: white;
+   box-shadow: 0px 0px 10px 0px black;
+   cursor: pointer;
+}
+
+.login-form-container
+{
+   text-align: center;
+   margin-top: 10%;
+
+}
+
+.login-form-container h1
+{
+   color: black;
+   font-size: 24px;
+   padding: 20px;
+}
+
+input
+{
+   box-sizing: border-box;
+   font-size: 14px;
+   padding: 10px;
+   border-radius: 7px;
+   border: 1px solid rgb(168, 168, 168);
+   width: 250px;
+   outline: none;
+   margin-top: 10px;
+}
+
+.login-button{
+   box-sizing: border-box;
+   color: white;
+   font-size: 14px;
+   padding: 13px;
+   border-radius: 7px;
+   border: none;
+   width: 250px;
+   outline: none;
+   background-color: rgb(56, 102, 189);
+   margin-top: 10px;
+   cursor: pointer;
+}
+
+
+
+.button-2
+{
+   display: none;
+}
+
+
+
+
+
+.signup-form-container
+{
+   position: relative;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%,-60%);
+   text-align: center;
+   display: none;
+   position: absolute;
+   top: 48%;
+   left: 66%;
+}
+
+
+.signup-form-container h1
+{
+   color: black;
+   font-size: 24px;
+   padding: 20px;
+}
+
+.signup-button{
+   box-sizing: border-box;
+   color: white;
+   font-size: 14px;
+   padding: 13px;
+   border-radius: 7px;
+   border: none;
+   width: 250px;
+   outline: none;
+   background-color: rgb(56, 189, 149);  
+   margin-top: 10px;
+   cursor: pointer;
+}
+
+.wrong{
+   color: red;
+}
