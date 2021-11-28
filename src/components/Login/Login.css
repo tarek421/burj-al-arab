@@ -58,6 +58,7 @@ body{
 .box-2{
    background-color: white;
    margin: 5px;
+   height: 97%;
 }
 
 .social-login{
@@ -83,7 +84,7 @@ body{
 .login-form-container
 {
    text-align: center;
-   margin-top: 10%;
+   margin-top: 5px;
 
 }
 
@@ -103,7 +104,8 @@ input
    border: 1px solid rgb(168, 168, 168);
    width: 250px;
    outline: none;
-   margin-top: 10px;
+   margin: 10px auto;
+   display: block;
 }
 
 .login-button{

@@ -1,90 +1,133 @@
 import { faFacebook, faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { useHistory, useLocation } from "react-router";
+import { userContext } from "../../App";
 import "./Login.css";
-import { firebaseInitialize, handleGoogleSignIn } from "./LoginManager";
+import { CreateUserWithEmailPassword, signInWithEmailPassword, firebaseInitialize, handleFacebookSignIn, handleGoogleSignIn } from "./LoginManager";
+
 
 const Login = () => {
-  const [loggedInUser, setLoggedInUser] = useState();
+  const [loggedInUser, setLoggedInUser] = useContext(userContext);
+  const [newUser, setNewUser] = useState(false);
   console.log(loggedInUser);
+
+  const history = useHistory();
+  const Location = useLocation();
+  let { from } = Location.state || { from: { pathname: "/" } };
+
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => console.log(data);
-  const onSubmit2 = (data) => console.log(data);
+  const onSubmit = (data) => {
+    const loading = toast.loading('Please wait...');
+    const {name, email, password} = data;
+    if(newUser && name && email && password){
+      firebaseInitialize();
+      CreateUserWithEmailPassword(name, email, password)
+      .then(res => {
+        toast.success("Successfully SignIn");
+        toast.dismiss(loading);
+      })
+      .catch(err => {
+        toast.error(err.message);
+        toast.dismiss(loading);
+      })
+    };
 
-  const signup = () => {
-    document.querySelector(".login-form-container").style.cssText =
-      "display: none;";
-    document.querySelector(".signup-form-container").style.cssText =
-      "display: block;";
-    document.querySelector(".container").style.cssText =
-      "background: linear-gradient(to bottom, rgb(56, 189, 149),  rgb(28, 139, 106));";
-    document.querySelector(".button-1").style.cssText = "display: none";
-    document.querySelector(".button-2").style.cssText = "display: block";
-  };
-
-  const login = () => {
-    document.querySelector(".signup-form-container").style.cssText =
-      "display: none;";
-    document.querySelector(".login-form-container").style.cssText =
-      "display: block;";
-    document.querySelector(".container").style.cssText =
-      "background: linear-gradient(to bottom, rgb(6, 108, 224),  rgb(14, 48, 122));";
-    document.querySelector(".button-2").style.cssText = "display: none";
-    document.querySelector(".button-1").style.cssText = "display: block";
-  };
+    if(!newUser && email && password) {
+      firebaseInitialize();
+      signInWithEmailPassword(email, password)
+      .then(res => {
+        toast.dismiss(loading)
+        handleResponse(res)
+      })
+      .catch(err => {
+        toast.error(err.message);
+        toast.dismiss(loading);
+      })
+    }
+  }
 
   const HandleGoogleSignIn = (res) => {
+    const loading = toast.loading('Please wait...');
     firebaseInitialize();
     handleGoogleSignIn(res)
-      .then((res) => setLoggedInUser(res))
+    .then(res => {
+      toast.dismiss(loading);
+      handleResponse(res)
+      })
       .catch((err) => {
-        console.error(err);
+        toast.dismiss(loading)
+        toast.error(err.message);;
       });
   };
 
+  const HandleFacebookSignIn = (res) => {
+    const loading = toast.loading('Please wait...');
+    firebaseInitialize();
+    handleFacebookSignIn(res)
+    .then(res => {
+      toast.dismiss(loading);
+      handleResponse(res)
+      })
+      .catch((err) => {
+        toast.dismiss(loading)
+        toast.error(err.message);;
+      });
+  }
+
+  const handleResponse = (res) => {
+    setLoggedInUser(res);
+    toast.success("Successfully LogIn");
+    history.replace(from);
+  }
+
   return (
-    <div class="container">
-      <div class="box-1">
-        <div class="content-holder">
+    <div className="container">
+      <div className="box-1">
+        <div className="content-holder">
           <h2>Hello!</h2>
           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. </p>
-          <button class="button-1" onClick={signup}>
-            Sign up
+          <button onClick={() => setNewUser(!newUser)} className="button-1" >
+            {newUser ? "Log In" : "Sign up"}
           </button>
-          <button class="button-2" onClick={login}>
-            Login
-          </button>
-          <img src="../images/Double.png" alt="" />
         </div>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div class="box-2">
-          <div class="login-form-container">
+        <div className="box-2">
+          <div className="login-form-container">
             <h1>Login Form</h1>
-            <input
-              placeholder="Enter Your Email"
-              {...register("Email", { required: true })}
+
+            {
+              newUser && <input
+              placeholder="Enter Your Name"
+              {...register("name", {required: true })}
+              required
             />
-            {errors.Email && <span className="wrong">Name is required</span>}
+            }
 
             <input
-              placeholder="Enter Your Name"
-              {...register("password", { required: true })}
+              placeholder="Enter Your Email"
+              {...register("email", { pattern: /\S+@\S+\.\S+/, required: true })}
+            />
+            {errors.email && <span className="wrong">Email is required</span>}
+
+            <input style={{transition:"all 4s"}}
+              placeholder="Enter Your Password"
+              {...register("password", { pattern: /^(?=.*[a-z]).{8,}$/, required: true })}
             />
             {errors.password && (
               <span className="wrong">Password is required</span>
             )}
 
-
-            <input class="login-button" type="submit" />
+            <input className="login-button" type="submit" />
 
             <div className="social-login">
               <p>Login with</p>
@@ -92,43 +135,13 @@ const Login = () => {
               <li onClick={HandleGoogleSignIn} className="social-icon">
                 <FontAwesomeIcon icon={faGoogle} />
               </li>
-              <li className="social-icon">
+              <li onClick={HandleFacebookSignIn} className="social-icon">
                 <FontAwesomeIcon icon={faFacebook} />
               </li>
             </div>
           </div>
         </div>
         </form>
-
-        <form onSubmit={handleSubmit(onSubmit2)}>
-        <div class="signup-form-container">
-          <h1>Sign Up Form</h1>
-          <input
-            placeholder="Enter Your Name"
-            {...register("Name", { required: true })}
-          />
-          {errors.Name && <span className="wrong">Name is required</span>}
-          <br />
-
-          <input
-            placeholder="Enter Your Name"
-            {...register("Name", { required: true })}
-          />
-          {errors.Name && <span className="wrong">Name is required</span>}
-
-          <br />
-          <input
-            placeholder="Enter Your Name"
-            {...register("password", { required: true })}
-          />
-          {errors.password && (
-            <span className="wrong">Password is required</span>
-          )}
-
-          <br />
-          <input class="signup-button" type="submit" />
-        </div>
-      </form>
     </div>
   );
 };

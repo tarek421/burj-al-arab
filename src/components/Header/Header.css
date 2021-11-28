@@ -7,6 +7,23 @@
 .header .logo{
     height: 50px;
 }
+.header-menu{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 15px;
+}
+
+.header-menu-li{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile-img{
+    width: 50px;
+    border-radius: 50%;
+}
 .title-container{
     color: rgba(255, 255, 255, 0.699);
     text-align: center;
