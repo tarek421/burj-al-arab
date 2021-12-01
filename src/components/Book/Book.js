@@ -20,8 +20,8 @@ const Book = () => {
     const checkIn = (value[0]);
     const checkOut = (value[1]);
     const CheckDate = {checkIn, checkOut};
-    console.log(CheckDate)
     const newBooking = { ...loggedInUser, ...CheckDate };
+    
     fetch("http://localhost:5000/addBookings", {
       method: "POST",
       body: JSON.stringify(newBooking),

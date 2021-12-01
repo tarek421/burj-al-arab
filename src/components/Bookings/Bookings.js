@@ -1,19 +1,28 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { userContext } from '../../App';
+import React, { useContext, useState, useEffect } from 'react';
+import { userContext } from "../../App";
 
 const Bookings = () => {
-   const [bookings, setBookings] = useState([]);
    const [loggedInUser] = useContext(userContext);
-   useEffect(() =>{
-      fetch('http://localhost:5000/bookings?email='+loggedInUser.email)
-      .then(res => res.json())
-      .then(data => setBookings(data))
-   })
+   console.log(loggedInUser);
+   const [bookings, setBookings] = useState([]);
+
+   useEffect(() => {
+      fetch(`http://localhost:5000/bookings?email=`+loggedInUser.email,{
+         method: 'GET',
+         headers: {
+            'content-type': 'application/json',
+            authorization: `Bearer ${sessionStorage.getItem('idToken')}`
+         }
+      })
+      .then((response) =>response.json())
+      .then(data =>setBookings(data))
+   },[loggedInUser.email])
+
    return (
       <div>
-         <h3>You have {bookings.length} Bookings</h3>
+         <h4>you Have {bookings.length} bookings</h4>
          {
-            bookings.map(book => <li>{book.name}: From : {(new Date(book.checkIn).toDateString('dd/mm/yyyy'))} To : {(new Date(book.checkOut).toDateString('dd/mm/yyyy'))} </li>)
+            bookings.map((booking) =><li>Name: {booking.name} From: {booking.checkIn} To: {booking.checkOut}</li>)
          }
       </div>
    );

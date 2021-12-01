@@ -7,12 +7,14 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   updateProfile,
+  // getIdToken,
+  // onAuthStateChanged
 } from "firebase/auth";
 import firebaseConfig from "./firebase.config";
-
 export const firebaseInitialize = () => {
   return initializeApp(firebaseConfig);
 };
+
 
 export const handleGoogleSignIn = (res) => {
   const GoogleProvider = new GoogleAuthProvider();
@@ -50,6 +52,12 @@ const UpdateUserName = (name) => {
     displayName: name,
   });
 };
+ 
+// export const storAuthToken = onAuthStateChanged((idToken) => {
+//      return getIdToken(idToken)
+//           .then(idToken => localStorage.setItem('idToken', idToken));
+// });
+
 
 const handleResponse = (res) => {
   const { displayName, email, photoURL } = res.user;

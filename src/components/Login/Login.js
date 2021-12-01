@@ -8,11 +8,13 @@ import { userContext } from "../../App";
 import "./Login.css";
 import { CreateUserWithEmailPassword, signInWithEmailPassword, firebaseInitialize, handleFacebookSignIn, handleGoogleSignIn } from "./LoginManager";
 
+import {getAuth} from "firebase/auth";
+
 
 const Login = () => {
   const [loggedInUser, setLoggedInUser] = useContext(userContext);
   const [newUser, setNewUser] = useState(false);
-  console.log(loggedInUser);
+
 
   const history = useHistory();
   const Location = useLocation();
@@ -82,9 +84,23 @@ const Login = () => {
       });
   }
 
+
+const firebaseIdToken = () => {
+  getAuth().currentUser.getIdToken(true)
+  .then(function(idToken) {
+    console.log(idToken);
+    sessionStorage.setItem('idToken', idToken);
+  }).catch(function(error) {
+    console.log(error)
+  });
+}
+
+
+
   const handleResponse = (res) => {
     setLoggedInUser(res);
     toast.success("Successfully LogIn");
+    firebaseIdToken();
     history.replace(from);
   }
 
