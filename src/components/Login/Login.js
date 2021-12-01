@@ -13,7 +13,7 @@ import {getAuth} from "firebase/auth";
 
 const Login = () => {
   const [loggedInUser, setLoggedInUser] = useContext(userContext);
-  const [newUser, setNewUser] = useState(false);
+  const [newUser, setNewUser] = useState(fals);
 
 
   const history = useHistory();
